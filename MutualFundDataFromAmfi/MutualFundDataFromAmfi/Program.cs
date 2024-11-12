@@ -35,8 +35,10 @@ namespace MutualFundDataFromAmfi
             }
 
             var mutualFundTitle = mfList.Where(x => x.SchemeCode == null && x.MutualFundName.Contains("Mutual Fund")).ToList();
-            var excludeDuplicateTitles = mutualFundTitle.Select(i => new { i.MutualFundName })
-            .Distinct().Select(x => new MutualFund { MutualFundName = x.MutualFundName }).OrderBy(x => x.MutualFundName).ToList();
+            var excludeDuplicateTitles = mutualFundTitle.
+                Select(i => new { i.MutualFundName }).
+                Distinct().Select(x => new MutualFund { MutualFundName = x.MutualFundName }).
+                OrderBy(x => x.MutualFundName).ToList();
 
             var mutualFunds = new List<MutualFund>();
             foreach (var mfTitle in excludeDuplicateTitles)
@@ -47,7 +49,8 @@ namespace MutualFundDataFromAmfi
                 foreach (var fund in funds)
                 {
                     fund.MutualFundName = mfTitle.MutualFundName;
-                    fund.IsVisible = true;
+                    fund.IsMutualFundVisible = true;
+                    fund.IsSchemeVisible = true;
                     mutualFunds.Add(fund);
                 }
             }
@@ -62,9 +65,10 @@ namespace MutualFundDataFromAmfi
 public class MutualFund
 {
     public string MutualFundName { get; set; }
+    public bool IsMutualFundVisible { get; set; }
     public string SchemeCode { get; set; }
     public string SchemeName { get; set; }
     public string Rate { get; set; }
     public string Date { get; set; }
-    public bool IsVisible { get; set; }
+    public bool IsSchemeVisible { get; set; }
 }
