@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -48,8 +49,12 @@ namespace MutualFundDataFromAmfi
                 var funds = mfList.Where(x => x.SchemeName != null && x.SchemeName.Contains(tilteSplit)).ToList();
                 foreach (var fund in funds)
                 {
-                    fund.MutualFundName = mfTitle.MutualFundName;
-                    fund.IsMutualFundVisible = true;
+                    if (fund.Fund == null)
+                    {
+                        fund.Fund = new Fund();
+                    }
+                    fund.Fund.MutualFundName = mfTitle.MutualFundName;
+                    fund.Fund.IsMutualFundVisible = true;
                     fund.IsSchemeVisible = true;
                     mutualFunds.Add(fund);
                 }
@@ -62,13 +67,23 @@ namespace MutualFundDataFromAmfi
         }
     }
 }
+
+[JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
 public class MutualFund
 {
+    [JsonIgnore]
     public string MutualFundName { get; set; }
-    public bool IsMutualFundVisible { get; set; }
+    public Fund Fund { get; set; }
     public string SchemeCode { get; set; }
     public string SchemeName { get; set; }
     public string Rate { get; set; }
     public string Date { get; set; }
     public bool IsSchemeVisible { get; set; }
+}
+
+[JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
+public class Fund
+{
+    public string MutualFundName { get; set; }
+    public bool IsMutualFundVisible { get; set; }
 }
