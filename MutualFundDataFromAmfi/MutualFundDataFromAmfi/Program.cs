@@ -29,8 +29,8 @@ namespace MutualFundDataFromAmfi
                 }
                 mf.SchemeCode = entries[0];
                 mf.SchemeName = entries[3];
-                mf.rate = entries[4];
-                mf.date = entries[5];
+                mf.Rate = entries[4];
+                mf.Date = entries[5];
                 mfList.Add(mf);
             }
 
@@ -64,7 +64,7 @@ public class MutualFund
     public string MutualFundName { get; set; }
     public string SchemeCode { get; set; }
     public string SchemeName { get; set; }
-    public string rate { get; set; }
-    public string date { get; set; }
+    public string Rate { get; set; }
+    public string Date { get; set; }
     public bool IsVisible { get; set; }
 }
