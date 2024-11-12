@@ -47,6 +47,7 @@ namespace MutualFundDataFromAmfi
                 foreach (var fund in funds)
                 {
                     fund.MutualFundName = mfTitle.MutualFundName;
+                    fund.IsVisible = true;
                     mutualFunds.Add(fund);
                 }
             }
@@ -65,4 +66,5 @@ public class MutualFund
     public string SchemeName { get; set; }
     public string rate { get; set; }
     public string date { get; set; }
+    public bool IsVisible { get; set; }
 }
