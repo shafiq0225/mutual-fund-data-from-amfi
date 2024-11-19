@@ -41,9 +41,25 @@ namespace MutualFundDataFromAmfi
                 Distinct().Select(x => new MutualFund { MutualFundName = x.MutualFundName }).
                 OrderBy(x => x.MutualFundName).ToList();
 
-            var mutualFunds = new List<MutualFund>();
-            foreach (var mfTitle in excludeDuplicateTitles)
+            var fundList = new List<Fund>();     
+            var ex = excludeDuplicateTitles.Select(x => x.MutualFundName).ToList();
+            var id = 1;
+            foreach (var item in ex)
             {
+                var f = new Fund();
+                f.MutualFundName = item;
+                f.IsMutualFundVisible = true;
+                f.MutualFundCode = item.Split(' ').FirstOrDefault() + "_" + id++;
+                fundList.Add(f);
+            }
+            string mu = JsonConvert.SerializeObject(fundList, Newtonsoft.Json.Formatting.Indented);
+            Console.WriteLine(mu);
+            //write string to file
+            System.IO.File.WriteAllText(@"C:\Users\shafi\Downloads\mf.json", mu);
+            var mutualFunds = new List<MutualFund>();
+            var index = 1;
+            foreach (var mfTitle in excludeDuplicateTitles)
+            {            
                 var tilteSplit = mfTitle.MutualFundName.Split(' ').FirstOrDefault();
                 tilteSplit = tilteSplit + " ";
                 var funds = mfList.Where(x => x.SchemeName != null && x.SchemeName.Contains(tilteSplit)).ToList();
@@ -54,10 +70,12 @@ namespace MutualFundDataFromAmfi
                         fund.Fund = new Fund();
                     }
                     fund.Fund.MutualFundName = mfTitle.MutualFundName;
+                    fund.Fund.MutualFundCode = tilteSplit + "_" + index;
                     fund.Fund.IsMutualFundVisible = true;
                     fund.IsSchemeVisible = true;
                     mutualFunds.Add(fund);
                 }
+                index++;
             }
             string json = JsonConvert.SerializeObject(mutualFunds, Newtonsoft.Json.Formatting.Indented);
             Console.WriteLine(json);
@@ -84,6 +102,7 @@ public class MutualFund
 [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
 public class Fund
 {
+    public string MutualFundCode { get; set; }
     public string MutualFundName { get; set; }
     public bool IsMutualFundVisible { get; set; }
 }
