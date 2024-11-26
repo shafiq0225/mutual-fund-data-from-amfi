@@ -31,7 +31,7 @@ namespace MutualFundDataFromAmfi
                 mf.SchemeCode = entries[0];
                 mf.SchemeName = entries[3];
                 mf.Rate = entries[4];
-                mf.Date = entries[5];
+                mf.Date = entries[5] == "Date" ? entries[5] : DateTime.Parse(entries[5]).Date.ToString("d");
                 mfList.Add(mf);
             }
 
@@ -80,7 +80,7 @@ namespace MutualFundDataFromAmfi
             string json = JsonConvert.SerializeObject(mutualFunds, Newtonsoft.Json.Formatting.Indented);
             Console.WriteLine(json);
             //write string to file
-            System.IO.File.WriteAllText(@"C:\Users\shafi\Downloads\path.json", json);
+            System.IO.File.WriteAllText(@"C:\Users\shafi\Downloads\nav.json", json);
             Console.ReadLine();
         }
     }
